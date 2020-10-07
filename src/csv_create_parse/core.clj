@@ -7,12 +7,29 @@
 
 (defn name-vec [] [(first-name) (last-name)])
 
+;; Creates randomly generated CSV file of 5000 first and last names
+
+(def filename "first-and-last-names.csv")
+
 (def name-csv 
-		(with-open [writer (io/writer "first-and-last-names.csv")]
+		(with-open [writer (io/writer filename)]
   		(csv/write-csv writer
                  		(repeatedly 5000 name-vec))))
 
-(def filename "first-and-last-names.csv")
+;; Let us know if the data is contained true/false
+
+;; call with something like: (clojure.string/includes? (slurp filename) "Cade")
+
+;; Let us iterate through matched data and return nil if not present
+
+(defn name-matcher
+		"Find name in dataset and return it, otherwise return nil if not present"
+		[name-string file]
+		(re-matcher (re-pattern name-string) (slurp file)))
+
+;; call with something like: (re-find (name-matcher "Cade" filename))
+
+;; Create key-value pairs of first / last name and allow for all instance lookup
 
 (def name-keys [:first-name :last-name])
 
@@ -43,4 +60,4 @@
   [key name records]
   (filter #(= (key %) name) records))
 
-;; call with (name-filter :first-name "Rey" (mapify (parse (slurp filename))))
+;; call with (name-filter :first-name "Cade" (mapify (parse (slurp filename))))
