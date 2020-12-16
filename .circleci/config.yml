@@ -19,8 +19,6 @@ jobs:
 
     steps:
       - checkout
-
-      # Download and cache dependencies
       - restore_cache:
           keys:
             - v1-dependencies-{{ checksum "project.clj" }}
